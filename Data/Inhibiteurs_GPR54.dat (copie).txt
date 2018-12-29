@@ -1,9 +1,9 @@
 ﻿Compound ID	N	Means	SEM	SD	N-term	AA1	AA2	AA3	AA4	AA5	AA6	AA7	AA8	AA9	AA10	C-ter	StructureChemDraw	
-mKP10	2,295183333	2,117729444	3,096378117	H	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	1
-hKP10	0,706958333	0,515614583	0,674870904	H	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Phe	NH2	2
-eKP10	3,133333333	2,311111111	3,164385143	H	Tyr	Arg	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	_
-dKP10	0,053533333	0,035288889	0,050014531	H	Tyr	Asn	Trp	Asn	Val	Phe	Gly	Leu	Arg	Tyr	NH2	_
-palmKP10	N=2	> 5 µM	Palm	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	13
+mKP10		2,295183333	2,117729444	3,096378117	H	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	1
+hKP10		0,706958333	0,515614583	0,674870904	H	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Phe	NH2	2
+eKP10		3,133333333	2,311111111	3,164385143	H	Tyr	Arg	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	_
+dKP10		0,053533333	0,035288889	0,050014531	H	Tyr	Asn	Trp	Asn	Val	Phe	Gly	Leu	Arg	Tyr	NH2	_
+palmKP10	N=2	> 5 µM			Palm	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	13
 mAcKP10	N=6	0,105	0,0975	0,14621022	Ac	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	4
 hAcKP10 (PhM1-59-1)	N=2	0,023	0,002	0,002828427	Ac	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Phe	NH2	5
 PhM 1-57-1	N=4	0,26	0,17	0,240416306	hexanoyl	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	9BRUT
@@ -80,3 +80,4 @@ JBM1-55-2	N=2	>0.0005	Ac	D-Tyr	_	Hyp	Asn	Thr	Phe	Gly	Y[tz]Leu	Arg(Me)	Trp	NH2
 JBM1-95-2	N=2	1,6	0,2	0,282842712	Ac	Tyr	Lys(Palm-iGlu)	Trp	Asn	Ser	Phe	Gly	Y[tz]Leu	Arg	Tyr	NH2	
 JBM1-112-1 (mKP10)	N=1	0,0024	0	0	H	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
 JBM1-112-2 (mKP10 pure)	N=1	0,0021	0	0	H	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2
+00000
