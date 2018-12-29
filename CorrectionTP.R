@@ -1,1 +1,4 @@
+
 dt = read.csv("Data/Inhibiteurs_GPR54.dat (copie).txt", sep = "\t")
+
+dt.hclust = hclust(dt)

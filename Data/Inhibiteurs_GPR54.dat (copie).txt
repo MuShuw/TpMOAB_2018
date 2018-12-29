@@ -49,7 +49,7 @@ MG2-34	N=3	0,566666667	0,111111111	0,160416126	H2N-CH2-	Y[tz]Tyr	Asn	Trp	Asn	Ser
 MG2-35	N=3	1,723333333	1,384444444	1,813734637	HO-CH2-	Y[tz]Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
 MG2-36	N=3	0,399666667	0,460222222	0,597871502	CH3-CH2-CH2-	Y[tz]Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
 JBM1-83-1	N=2	24,4	19,6	27,71858582	Ac	Tyr	Asn	Lys(Palm-iGlu)	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
-JBM1-83-2	N=2	> 500	Ac	Tyr	Asn	Lys(Palm)	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
+JBM1-83-2	N=2	> 500			Ac	Tyr	Asn	Lys(Palm)	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
 JBM1-83-3	N=2	0,0027	0,0021	0,002969848	Bz	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
 JBM1-83-4	N=2	0,0005	0,0001	0,000141421	Bn	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
 JBM1-83-5	N=1	4,6	0	0	Ac	Tyr	Asn	Lys(PEG2000)	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
@@ -62,7 +62,7 @@ JBM1-153-1	N=1	0,0009	0	0	Palm-iGlu	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Y[tz]Leu	Arg	Trp
 JBM1-153-2	N=1	90	0	0	Ac	Tyr	Asn	Lys(Palm-iGlu)	Asn	Ser	Phe	Gly	Y[tz]Leu	Arg	Tyr	NH2	
 JBM1-153-3	N=5	1,14268	1,422928	2,007869595	Palm-iGlu	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Y[tz]Leu	Arg(Me)	Tyr	NH2	
 JBM1-153-6	N=1	0,012	0	0	Palm-iGlu	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Y[tz]Leu	Arg	Phe	NH2	
-JBM1-130-1	Ac	Tyr	Lys(N3-PEG4)	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
+JBM1-130-1					Ac	Tyr	Lys(N3-PEG4)	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
 JBM1-71-1/JBM1-87-1	N=2	11,35	10,05	14,2128463	Ac	Tyr	Lys(PEG5000)	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
 JBM1-71-2/JBM1-87-2	N=2	2,15	1,45	2,050609665	Ac	Tyr	Lys(PEG2000)	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
 JBM1-71-4/JBM1-87-4	N=4	2,9505	1,87475	2,787962398	Ac	Tyr	Lys(Palm-iGlu)	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
@@ -76,8 +76,7 @@ JBM1-132-3	N=2	0,285	0,165	0,233345238	Ac	pTyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	T
 JBM1-136-1	N=2	0,0005	0	0	Ac	Tyr	Lys(CY3)	Trp	Asn	Ser	Phe	Gly	Y[tz]Leu	Arg	Tyr	NH2	
 JBM1-136-2	N=2	0,00055	0,00045	0,000636396	Ac	Tyr	Lys(Albutag)	Trp	Asn	Ser	Phe	Gly	Y[tz]Leu	Arg	Tyr	NH2	
 JBM1-55-1	N=2	0,00125	0,00075	0,00106066	Ac	D-Tyr	_	D-Trp	Asn	Thr	Phe	Gly	Y[tz]Leu	Arg(Me)	Trp	NH2	
-JBM1-55-2	N=2	>0.0005	Ac	D-Tyr	_	Hyp	Asn	Thr	Phe	Gly	Y[tz]Leu	Arg(Me)	Trp	NH2	
+JBM1-55-2	N=2	>0.0005			Ac	D-Tyr	_	Hyp	Asn	Thr	Phe	Gly	Y[tz]Leu	Arg(Me)	Trp	NH2	
 JBM1-95-2	N=2	1,6	0,2	0,282842712	Ac	Tyr	Lys(Palm-iGlu)	Trp	Asn	Ser	Phe	Gly	Y[tz]Leu	Arg	Tyr	NH2	
 JBM1-112-1 (mKP10)	N=1	0,0024	0	0	H	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2	
 JBM1-112-2 (mKP10 pure)	N=1	0,0021	0	0	H	Tyr	Asn	Trp	Asn	Ser	Phe	Gly	Leu	Arg	Tyr	NH2
-00000
