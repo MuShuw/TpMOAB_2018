@@ -103,9 +103,8 @@ summary(dt[which(dt.cut != dt.cut[1]),5:16])
 
 
 
-# ---- Classification des donnees ----
+# ---- Apprentissage sur les donnees ----
 library(nnet)
-
 
 classe = c()
 for(i in 1:length(dt.cut)){
