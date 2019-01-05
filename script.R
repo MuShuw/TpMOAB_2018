@@ -88,8 +88,6 @@ summary(dt[which(dt.cut != dt.cut[1]),5:16])
 # En revanche on remarque que pour les positions AA1, AA5, AA9, AA10 l'acide amine est a chaque fois identique pour tout les peptides lie donc pourrait des
 # position conserve entre les peptides necessaire a leur liaison au recepteur et il est difficile de comparer les position N.ter, AA2, AA3 qu'il faudrait
 # visualiser au cas par cas, nous les conservons donc dans notre liste de position potentielle qui est donc composé de N.ter, AA1, AA2, AA3, AA5, AA9, AA10
-# Pour voir si ces positions sont vraiment essentielles, nous allons réaliser un apprentissage se basant sur ces positions et prédsant si un peptide appartient
-# à la classe sans activite ou si elle appartient à celle des peptides lies au recepteur.
 
 
 
