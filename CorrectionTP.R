@@ -20,4 +20,3 @@ sum(is.na(dt1[,5:16]))
 
 mydist = dist(dt1[,5:16], method = "manhattan")
 # MAS QUE FAAAAAAAAAAAAAAAIIIIIIRE
-dt.hclust = hclust(dt1[,5:16])
