@@ -1,20 +1,7 @@
 library(skimr)
-setwd("~/Bureau/projet_moab/")
-
-# ---- Nettoyage ----
-# Suppression pour fournir le jeu de donnée du TP, retire les colones inutiles, met de NA quand une valeur est manquante et
-# suppression de la ligne 64 qui contient un peptide sans moyenne donc inutilisable
-# suppression de la ligne 70 qui contient un peptide sans sequence donc inutilisable
-dt = read.csv("Data/Inhibiteurs_GPR54.dat (copie).txt", sep="\t", dec = ".")
-dt = dt[,-c(19,18,4)]
-dt = dt[-c(70,64),]
-dt[c(78, 51, 35, 5), 4] = NA
-write.csv(dt, file = "Inhibiteurs_GPR54.dat(copie-Bertrand).txt", row.names = FALSE)
-
-
 
 # ---- Import des donnees ----
-dt = read.csv("Inhibiteurs_GPR54.dat(copie-Bertrand).txt")
+dt = read.csv("Inhibiteurs_GPR54.dat.txt")
 
 
 
@@ -31,6 +18,7 @@ dt[,2] = as.factor(dt[,2])
 par(mfrow = c(1,2))
 plot(dt[,3], main = "MEANS")
 plot(dt[,4], main = "SD")
+dev.off()
 
 # 3.
 # On observe la présence d'une base de peptides donc l'activité est quasiment nulle et quelque peptide dont
@@ -93,7 +81,6 @@ plot(dt$Means, col= c(2,1,3,4,5)[dt.cut], main = "Classification hclust")
 
 # 3.
 summary(dt[which(dt.cut == dt.cut[1]),5:16])
-#hist(dt[which(dt.cut == dt.cut[1] & dt[,3] < 10 ),3], breaks = 50)
 summary(dt[which(dt.cut != dt.cut[1]),5:16])
 
 # Nous pouvons eliminer des positions d'interet: AA4, AA6, AA7, AA8, C.ter car ces position ne présente soi aucune différence entre les peptides
@@ -104,25 +91,11 @@ summary(dt[which(dt.cut != dt.cut[1]),5:16])
 # Pour voir si ces positions sont vraiment essentielles, nous allons réaliser un apprentissage se basant sur ces positions et prédsant si un peptide appartient
 # à la classe sans activite ou si elle appartient à celle des peptides lies au recepteur.
 
-############ bazar d'observation ###############
-dt_temp = apply(dt[,5:16], MARGIN = 2, as.factor)
-skim(as.data.frame(dt_temp))
-dt1 = as.data.frame(cbind(dt[,-c(5:16)], dt_temp))
-dt1 = dt1[which(dt.cut != dt.cut[1]),]
-mean_Nter = split(dt1$Means, dt1$N.term)
-dev.off()
-boxplot(mean_Nter, notch = FALSE, varwidth = TRUE)
-mean_AA2 = split(dt1$Means, dt1$AA2)
-dev.off()
-boxplot(mean_AA2, notch = FALSE, varwidth = TRUE)
-mean_AA3 = split(dt1$Means, dt1$AA3)
-dev.off()
-boxplot(mean_AA3, notch = FALSE, varwidth = TRUE)
-###################################################
+
+
 # ---- Apprentissage sur les donnees ----
 
-# ---- Creation d'une sequence consensu ----
-
+# -- Creation d'une sequence consensus --
 # Creation d'une liste contenant les tables de frequence à chaque position
 Diff_element = apply(dt[,5:16], 2, table)
 
@@ -133,25 +106,25 @@ Consensus = vector()
 
 # On va parcourir notre liste de table
 for ( i in seq_along(Diff_element)){
-        # Chaque table est enregistrée dans un df temporaire
-        tmp = as.data.frame(Diff_element[[i]])
-        # Les elements de la première colonne sont transformer en character pour
-        # tester le matching
-        tmp$Var1 <- as.character(tmp$Var1)
-        # Les elements de la deuxième colonne sot convertie en valeur numérique
-        tmp$Freq <- as.numeric(tmp$Freq)
-        # Chaque ieme element de consensus va contenir l'element dont la freq est la
-        # plus importante, ie l'element majoritaire
-        Consensus[i] = tmp[which(tmp$Freq == max(tmp$Freq)),1]
+  # Chaque table est enregistrée dans un df temporaire
+  tmp = as.data.frame(Diff_element[[i]])
+  # Les elements de la première colonne sont transformer en character pour
+  # tester le matching
+  tmp$Var1 <- as.character(tmp$Var1)
+  # Les elements de la deuxième colonne sot convertie en valeur numérique
+  tmp$Freq <- as.numeric(tmp$Freq)
+  # Chaque ieme element de consensus va contenir l'element dont la freq est la
+  # plus importante, ie l'element majoritaire
+  Consensus[i] = tmp[which(tmp$Freq == max(tmp$Freq)),1]
 }
 
-# ---- Creation d'une table contenant les séquences sous forme de character ----
 
+# -- Creation d'une table contenant les séquences sous forme de character --
 # Creation d'une table de sequence
 table_de_seq = apply(dt[,5:16], 2, as.character)
 
-# ---- Creation d'une matrice de similarité pour l'apprentissage ----
 
+# -- Creation d'une matrice de similarité pour l'apprentissage --
 # Creation d'une matrice de 0, avec une nombre de lignes egale au nombre de libre du jeu de donnees
 # et de 12 colonnes pour les 12 elements de la séquence
 matching_matrix = as.data.frame(matrix(0, ncol = 12, nrow = dim(dt)[1]))
@@ -162,18 +135,18 @@ colnames(matching_matrix) = colnames(dt[,5:16])
 # de la ieme ligne du jeu different du consensus
 # On parcours les colonnes de la matrice des differences
 for ( j in 1:12 ){
-        # Puis ces lignes
-        for ( i in 1:dim(matching_matrix)[1]){
-                # Si l'element de le sequence du jeu de donnée diffère du consensus
-                if ( table_de_seq[i,j] != Consensus[j]){
-                        # On lui attribue la valeur 1
-                        matching_matrix[i,j] = 1
-                }
-        }
+  # Puis ces lignes
+  for ( i in 1:dim(matching_matrix)[1]){
+    # Si l'element de le sequence du jeu de donnée diffère du consensus
+    if ( table_de_seq[i,j] != Consensus[j]){
+      # On lui attribue la valeur 1
+      matching_matrix[i,j] = 1
+    }
+  }
 }
 
 
-# ---- Creation d'une matrice frequence proche d'une pssm ----
+# -- Creation d'une matrice frequence proche d'une pssm --
 
 # Creation d'une matrice de frequence contenant des zero
 freq_mat = as.data.frame(matrix(0, ncol = 12, nrow = dim(dt)[1]))
@@ -187,26 +160,24 @@ colnames(matching_matrix) = colnames(dt[,5:16])
 
 # On parcours les colonnes de la matrice des frequnces
 for ( j in 1:12 ){
-        # Puis ses lignes
-        for ( i in 1:dim(freq_mat)[1]){
-                # Chaque table est enregistrée dans un df temporaire
-                tmp = as.data.frame(Diff_element[[j]])
-                # Les elements de la première colonne sont transformer en character pour
-                # retrouver sa frequence
-                tmp$Var1 <- as.character(tmp$Var1)
-                # Les elements de la deuxième colonne sot convertie en valeur numérique puis divisé
-                # par le nombre de lignes de la table de sequence
-                tmp$Freq <- as.numeric(tmp$Freq)/dim(dt)[1]
-                # On enregistre la frequence de l'element en position i,j dans la matrice de frequence
-                # en position i,j
-                freq_mat[i,j] = tmp[which(tmp$Var1 == table_de_seq[i,j]),2]
-        }
+  # Puis ses lignes
+  for ( i in 1:dim(freq_mat)[1]){
+    # Chaque table est enregistrée dans un df temporaire
+    tmp = as.data.frame(Diff_element[[j]])
+    # Les elements de la première colonne sont transformer en character pour
+    # retrouver sa frequence
+    tmp$Var1 <- as.character(tmp$Var1)
+    # Les elements de la deuxième colonne sot convertie en valeur numérique puis divisé
+    # par le nombre de lignes de la table de sequence
+    tmp$Freq <- as.numeric(tmp$Freq)/dim(dt)[1]
+    # On enregistre la frequence de l'element en position i,j dans la matrice de frequence
+    # en position i,j
+    freq_mat[i,j] = tmp[which(tmp$Var1 == table_de_seq[i,j]),2]
+  }
 }
 
-# ---- Creation de groupe pour la classification ----
-
-# ---- Groupe dichotimique selon dt$Means ----
-
+# -- Creation de groupe pour la classification --
+# - Groupe dichotimique selon dt$Means -
 # Un valeur seuil est enregistrée ( ici la médiane a été choisie, tester avec différente valeurs, ex :
 # different quartiles, appartenant au cluster1 / exterieur au cluster1...[ Ici on changerai le seuil
 # et la colonne a tester [ avant ajouter une colonne avec le cluster ] ])
@@ -221,20 +192,18 @@ groupe1[which(dt$Means > seuil)] = 1
 # On joint ces deux groupes
 groupe = cbind(groupe0,groupe1)
 
-#### Creation de plusieurs groupe ----
-
-# ---- Utilisation de nnet ----
-
+# -- Creation de plusieurs groupe --
+# - Utilisation de nnet -
 library(nnet)
 
 # Observation sans split dans un premier temps
 performanceVal <- function(ConfTable){
-        Spe = ConfTable[2,2]/sum(ConfTable[,2])
-        Sen = ConfTable[1,1]/sum(ConfTable[,1])
-        Acc = (ConfTable[1,1]+ConfTable[2,2]) /sum(ConfTable)
-        Err = (ConfTable[1,2]+ConfTable[2,1]) /sum(ConfTable)
-        MyPerf = c(Spe, Sen, Acc, Err)
-        return(MyPerf)
+  Spe = ConfTable[2,2]/sum(ConfTable[,2])
+  Sen = ConfTable[1,1]/sum(ConfTable[,1])
+  Acc = (ConfTable[1,1]+ConfTable[2,2]) /sum(ConfTable)
+  Err = (ConfTable[1,2]+ConfTable[2,1]) /sum(ConfTable)
+  MyPerf = as.data.frame(cbind(Spe, Sen, Acc, Err))
+  return(MyPerf)
 }
 
 # Evaluation avec la Matching Matrix
@@ -242,18 +211,22 @@ net.dt_ecart = nnet(matching_matrix, groupe, size = 50, maxit = 1000, softmax  =
 x = predict(net.dt_ecart, matching_matrix)
 ConfTab = table( round(x)[,2], groupe[,2])
 PerfMatch = performanceVal(ConfTable = ConfTab)
+ConfTab
+PerfMatch
 
 # Evaluation avec la Frequence  Matrix
 net.dt_freq = nnet(freq_mat, groupe, size = 50, maxit = 1000, softmax  =  T)
 x = predict(net.dt_freq, freq_mat)
 ConfTab = table( round(x)[,2], groupe[,2])
 PerfFreq = performanceVal(ConfTable = ConfTab)
+ConfTab
+PerfFreq
 
 # On constate que l'utilisation d'une matrice de frequence permet une meilleur distinction,
 # Elle est porteuse de plus d'information
 
 
-# ---- Spitting des données ----
+# -- Spitting des données --
 seed = runif(1,1,10000)
 set.seed(191.0967) # 43, 44, 300, 191.0967, 114.3176
 seed
@@ -265,20 +238,23 @@ Match_test = matching_matrix[Index,]
 groupe_train = groupe[-Index,]
 groupe_test = groupe[Index,]
 
-# ---- training avec nnet ----
-
-# ---- Evaluation avec la Matching Matrix ----
+# -- training avec nnet --
+# - Evaluation avec la Matching Matrix -
 # 43, 44, 300, 191.0967, 114.3176
 net.dt_ecart = nnet(Match_train, groupe_train, size = 50, maxit = 1000, softmax  =  T)
+
 # Mesure des perfs sur le train
 x = predict(net.dt_ecart, Match_train)
 ConfTab = table( round(x)[,2], groupe_train[,2])
 PerfMatch_train = performanceVal(ConfTable = ConfTab)
+ConfTab
 PerfMatch_train
+
 # Mesure des perfs sur le test
 x = predict(net.dt_ecart, Match_test)
 ConfTab = table( round(x)[,2], groupe_test[,2])
 PerfMatch_test = performanceVal(ConfTable = ConfTab)
+ConfTab
 PerfMatch_test
 
 # ---- Evaluation avec la Frequence  Matrix ----
