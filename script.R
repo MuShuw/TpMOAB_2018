@@ -343,5 +343,5 @@ dt[which(dt$AA2 == "_"),]
 # un choix plus rigoureux passe par une compréhension biologique des valeurs de l'activitée,
 # de même les matrices créées donne des performances relativement mauvaises pour de la prédiction.
 # Une meilleur approche aurait était de récuperer des informations sur
-# les caractèristiques physicochimique des éléments des séquences.
-
+# les caractèristiques physicochimique des éléments des séquences. Autrement des classifications
+# sur des variables qualitatives comme LDA ou CART ou RandomForest auraient pu être utilisées.
