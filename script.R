@@ -94,7 +94,7 @@ summary(dt[which(dt.cut != dt.cut[1]),5:16])
 # ---- Apprentissage sur les donnees ----
 
 # -- Creation d'une sequence consensus --
-# Creation d'une liste contenant les tables de frequence à chaque position
+# 4.1.1 Creation d'une liste contenant les tables de frequence à chaque position
 Diff_element = apply(dt[,5:16], 2, table)
 
 # Creation d'un vecteur null
@@ -102,7 +102,7 @@ Consensus = vector()
 
 # On va entrer à chaque position de la sequence l'element majoritaire dans le jeu
 
-# On va parcourir notre liste de table
+# 4.1.2 On va parcourir notre liste de table
 for ( i in seq_along(Diff_element)){
   # Chaque table est enregistrée dans un df temporaire
   tmp = as.data.frame(Diff_element[[i]])
@@ -117,12 +117,12 @@ for ( i in seq_along(Diff_element)){
 }
 
 
-# -- Creation d'une table contenant les séquences sous forme de character --
-# Creation d'une table de sequence
+# ---- Creation d'une table contenant les séquences sous forme de character ----
+# 4.1.1 Creation d'une table de sequence
 table_de_seq = apply(dt[,5:16], 2, as.character)
 
 
-# -- Creation d'une matrice de similarité pour l'apprentissage --
+# ---- 4.1.3 Creation d'une matrice de similarité pour l'apprentissage ----
 # Creation d'une matrice de 0, avec une nombre de lignes egale au nombre de libre du jeu de donnees
 # et de 12 colonnes pour les 12 elements de la séquence
 matching_matrix = as.data.frame(matrix(0, ncol = 12, nrow = dim(dt)[1]))
@@ -144,7 +144,7 @@ for ( j in 1:12 ){
 }
 
 
-# -- Creation d'une matrice frequence proche d'une pssm --
+# 4.1.4 ---- Creation d'une matrice frequence proche d'une pssm ----
 
 # Creation d'une matrice de frequence contenant des zero
 freq_mat = as.data.frame(matrix(0, ncol = 12, nrow = dim(dt)[1]))
@@ -174,7 +174,7 @@ for ( j in 1:12 ){
   }
 }
 
-# -- Creation de groupe pour la classification --
+# 4.2 ---- Creation de groupe pour la classification ----
 # - Groupe dichotimique selon dt$Means -
 # Un valeur seuil est enregistrée ( ici la médiane a été choisie, tester avec différente valeurs, ex :
 # different quartiles, appartenant au cluster1 / exterieur au cluster1...[ Ici on changerai le seuil
@@ -190,41 +190,29 @@ groupe1[which(dt$Means > seuil)] = 1
 # On joint ces deux groupes
 groupe = cbind(groupe0,groupe1)
 
-# -- Creation de plusieurs groupe --
-# - Utilisation de nnet -
+# 4.3.1 - Utilisation de nnet -
 library(nnet)
 
-# Observation sans split dans un premier temps
+# Observation sans split dans un premier temps$
+# Cette fonction sera fournie. Elle permet de calculer les performances pour une classification
+# en lui donnant une table de confusion
 performanceVal <- function(ConfTable){
-  Spe = ConfTable[2,2]/sum(ConfTable[,2])
-  Sen = ConfTable[1,1]/sum(ConfTable[,1])
-  Acc = (ConfTable[1,1]+ConfTable[2,2]) /sum(ConfTable)
-  Err = (ConfTable[1,2]+ConfTable[2,1]) /sum(ConfTable)
-  MyPerf = as.data.frame(cbind(Spe, Sen, Acc, Err))
-  return(MyPerf)
+        # Specificité
+        Spe = ConfTable[2,2]/sum(ConfTable[,2])
+        # Sensibilité
+        Sen = ConfTable[1,1]/sum(ConfTable[,1])
+        # Taux de succes
+        Acc = (ConfTable[1,1]+ConfTable[2,2]) /sum(ConfTable)
+        # Taux d'erreur
+        Err = (ConfTable[1,2]+ConfTable[2,1]) /sum(ConfTable)
+        MyPerf = as.data.frame(cbind(Spe, Sen, Acc, Err))
+        return(MyPerf)
 }
 
-# Evaluation avec la Matching Matrix
-net.dt_ecart = nnet(matching_matrix, groupe, size = 50, maxit = 1000, softmax  =  T)
-x = predict(net.dt_ecart, matching_matrix)
-ConfTab = table( round(x)[,2], groupe[,2])
-PerfMatch = performanceVal(ConfTable = ConfTab)
-ConfTab
-PerfMatch
-
-# Evaluation avec la Frequence  Matrix
-net.dt_freq = nnet(freq_mat, groupe, size = 50, maxit = 1000, softmax  =  T)
-x = predict(net.dt_freq, freq_mat)
-ConfTab = table( round(x)[,2], groupe[,2])
-PerfFreq = performanceVal(ConfTable = ConfTab)
-ConfTab
-PerfFreq
-
-# On constate que l'utilisation d'une matrice de frequence permet une meilleur distinction,
-# Elle est porteuse de plus d'information
-
-
-# -- Spitting des données --
+# 4.3.1 -- Spitting des données --
+# Vous pouvez jouer avec la seed afin d'obtenir different sampling, pour ces sampling
+# vous constaterez de meilleures performances pour des sampling où le training contient une bonne
+# partie des valeurs qui n'appartenaient pas au cluster 1
 seed = runif(1,1,10000)
 set.seed(191.0967) # 43, 44, 300, 191.0967, 114.3176
 seed
@@ -236,8 +224,8 @@ Match_test = matching_matrix[Index,]
 groupe_train = groupe[-Index,]
 groupe_test = groupe[Index,]
 
-# -- training avec nnet --
-# - Evaluation avec la Matching Matrix -
+# 4.3-- training avec nnet --
+# ---- Evaluation avec la Matching Matrix ----
 # 43, 44, 300, 191.0967, 114.3176
 net.dt_ecart = nnet(Match_train, groupe_train, size = 50, maxit = 1000, softmax  =  T)
 
@@ -268,3 +256,55 @@ x = predict(net.dt_freq, Freq_test)
 ConfTab = table( round(x)[,2], groupe_test[,2])
 PerfMatch_test = performanceVal(ConfTable = ConfTab)
 PerfMatch_test
+
+
+# 4.4 ---- Element critique de la sequence ----
+
+
+# 4.4. Evaluation avec la Matching Matrix
+net.dt_ecart = nnet(matching_matrix, groupe, size = 50, softmax  =  T)
+pred_full_match = predict(net.dt_ecart, matching_matrix)
+pred_full_match = round(pred_full_match)
+ConfTab = table( pred_full_match[,2], groupe[,2])
+PerfMatch = performanceVal(ConfTable = ConfTab)
+ConfTab
+PerfMatch
+
+# 4.4 Evaluation avec la Frequence  Matrix
+net.dt_freq = nnet(freq_mat, groupe, size = 50, softmax  =  T)
+pred_full_freq = predict(net.dt_freq, freq_mat)
+pred_full_freq = round(pred_full_freq)
+ConfTab = table(pred_full_freq[,2], groupe[,2])
+PerfFreq = performanceVal(ConfTable = ConfTab)
+ConfTab
+PerfFreq
+
+# On constate que l'utilisation d'une matrice de frequence permet une meilleur distinction,
+# Elle est porteuse de plus d'information
+
+
+# On va selectionner les sequences supérieur au seuil pour nos deux modèles complets
+library(dplyr)
+# On va d'abord créer des dataframe contenant les sequence predite comme sup/inf au seuil et
+# les sequences réels
+sequence_match_sup = dt[which(pred_full_match[,2]==1),5:16]
+sequence_match_inf = dt[which(pred_full_match[,1]==1),5:16]
+sequence_freq_sup = dt[which(pred_full_freq[,2]==1),5:16]
+sequence_freq_inf = dt[which(pred_full_freq[,1]==1),5:16]
+sequence_true_sup = dt[which(groupe1==1),5:16]
+sequence_true_inf = dt[which(groupe0==1),5:16]
+
+# Puis nous allons déterminer les intersections de ces dataframe
+common_true_match_sup = inner_join(sequence_match_sup,sequence_true_sup)
+common_true_freq_sup = inner_join(sequence_freq_sup,sequence_true_sup)
+common_true_match_inf = inner_join(sequence_match_inf,sequence_true_inf)
+common_true_freq_inf = inner_join(sequence_freq_inf,sequence_true_inf)
+
+# On fait des resumé de ces intersections
+skim(common_true_match_sup)
+skim(common_true_match_inf)
+
+# Premièrement nous savons que AA6 et C-ter sont des invariants
+# Notre hypothèse est que si une postion contient plus de variant ?? Je galère encore un peu
+lapply(common_true_freq_sup, summary)
+lapply(common_true_freq_inf, summary)
