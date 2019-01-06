@@ -301,10 +301,47 @@ common_true_match_inf = inner_join(sequence_match_inf,sequence_true_inf)
 common_true_freq_inf = inner_join(sequence_freq_inf,sequence_true_inf)
 
 # On fait des resumé de ces intersections
+# L'intersection est utilisé pour méler les information brut réel avec les interaction
+# perçu par le modèle
+
 skim(common_true_match_sup)
 skim(common_true_match_inf)
 
 # Premièrement nous savons que AA6 et C-ter sont des invariants
-# Notre hypothèse est que si une postion contient plus de variant ?? Je galère encore un peu
-lapply(common_true_freq_sup, summary)
-lapply(common_true_freq_inf, summary)
+
+skim(common_true_match_sup)
+skim(common_true_match_inf)
+summary(common_true_match_sup)
+summary(common_true_match_inf)
+# On constate qu'une lysine acétylé en position AA4 est carachtéristique d'une valeur supérieur au seuil :
+dt[which(dt$AA4 == "Lys(Ac)"),]
+# L'individu 20 semble bien être une erreur de manipulation
+# On constate la même chose en position AA5 tandis que Thr semble être exclusivement chez les inférieur
+dt[which(dt$AA5 == "Lys(Ac)"),]
+# Ces 4 individus observés semble montrer que un Acetyle en position N-ter diminue l'activitée
+dt[which(dt$AA5 == "Thr"),]
+
+# Pour les positions AA8 et AA9 il n'apparait pas de disticntions particulières cependent les fréquences
+# de AA8:Y[tz]Leu et AA9:Arg(Me) sont moins importantes dans la catégorie supérieur
+
+# En position AA1 D-Tyr par sa fréauence chez les inférieurs et les observations précédante
+# semble réduire l'activité
+dt[which(dt$AA1 == "D-Tyr"),]
+
+# Les gaps en position AA2 semblent avoir un effet reduceur sur l'activitée
+dt[which(dt$AA2 == "_"),]
+
+
+
+# ---- Conclusion ----
+# De ce TP vous devez retenir les deux méthodes de clustering présentées
+# et l'informations quelles peuvent apporter, la façon de créer les splits et
+# de les utiliser pour la création d'un modèle nnet pour de la classification,
+# l'importance de la répartition des données dans ces deux sous-ensembles et
+# l'importance du niveau informatif d'un jeu de donnée.
+# Pour des raisons pratiques le seuil est arbitraire,
+# un choix plus rigoureux passe par une compréhension biologique des valeurs de l'activitée,
+# de même les matrices créées donne des performances relativement mauvaises pour de la prédiction.
+# Une meilleur approche aurait était de récuperer des informations sur
+# les caractèristiques physicochimique des éléments des séquences.
+
