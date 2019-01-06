@@ -8,7 +8,7 @@ dt = read.csv("Inhibiteurs_GPR54.dat.txt")
 # ---- Visualisation des donnees ----
 # 1.
 dim(dt)
-# 80 lignes et 16 colones Elyas : j'en ai 79 ??
+# 79 lignes et 16 colones
 summary(dt)
 skimr::skim(dt$Means)
 # Necessite de transformer la colone N en variable qualitative
